@@ -96,7 +96,7 @@ object Anagrams {
         val remaining = subset(xs)
         remaining.map(subsets => x :: subsets) ++ remaining
     }
-    subset(concatOccurrences(occurrences).sorted).distinct.sortWith((xs, ys) => xs.mkString > ys.mkString).map(ls => ls.groupBy(x => x).map { case (k, ys) => (k, ys.length) }.toList)
+    subset(concatOccurrences(occurrences).sorted).map(ls => ls.groupBy(x => x).map { case (k, ys) => (k, ys.length) }.toList)
   }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
@@ -164,18 +164,24 @@ object Anagrams {
       case Nil => List(List())
       case List() => List(List())
       case _ =>
-        val combos = combinations(occ).filter(combo => dictionaryByOccurrences contains combo)
+        val cs = combinations(occ)
+        val combos = cs.filter(combo => dictionaryByOccurrences contains combo.sorted)
         if (combos.length > 0) {
           for {
             combo <- combos
-            word <- dictionaryByOccurrences(combo)
+            word <- dictionaryByOccurrences(combo.sorted)
             sent <- sentenceAnagramsByOcc(subtract(occ, combo))
           } yield word :: sent
         } else {
-          List(List())
+          Nil
         }
     }
     sentenceAnagramsByOcc(sentenceOccurrences(sentence))
+  }
+
+
+  def main(args: Array[String]) = {
+    println(sentenceAnagrams(List("yes", "man")))
   }
 
 }
