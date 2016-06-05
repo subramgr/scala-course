@@ -1,0 +1,11 @@
+def times(chars: List[Char]): List[(Char, Int)] = {
+      def timesAcc(chars: List[Char], acc: Map[Char, Int]): List[(Char, Int)] =  chars match {
+        case Nil => acc.toList
+        case x :: xs => timesAcc(xs, acc + (x -> (acc.getOrElse(x, -1) + 1)))
+      }
+      timesAcc(chars, new HashMap)
+scala
+val g: Int = 1
+quit
+quit()
+submit subramanian.girish@gmail.com WGqSrj2ody0B6EIs
